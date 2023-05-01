@@ -149,22 +149,18 @@ class BN_Graph:
         return order
 
 if __name__ == "__main__":
-    pathwayName = 'hsa05165'
+    pathwayName = 'hsa04650'
 
     data = pd.read_csv('GSE/GSE43151_gs.csv')
     gse_genesets = pd.read_csv('GSE/geneSets.tsv')
 
     filteredGenes_all = getGeneLists(data,gse_genesets,'filtered')
-    pwlens = [len(filteredGenes_all[key]) for key in  filteredGenes_all]
-    pwlens.sort(reverse=True)
-    import matplotlib.pyplot as plt 
-    plt.plot(pwlens)
-    plt.title('filtered pathway sizes')
-    plt.show()
-    exit()
-
+    
+    
 
     filteredGenes = set(filteredGenes_all[pathwayName])
+    print(filteredGenes)
+    exit()
     acceptedRelations = {('PPrel', 'activation'),('PPrel', 'inhibition')}
 
     
@@ -179,8 +175,26 @@ if __name__ == "__main__":
     
     g2c = gene2col(data)
     order_inds = [g2c[str(gene)] for gene in order]
-    data = data.to_numpy()[:,order_inds]
+    labels = np.array(data['Dose'])
+    data = data.iloc[:,:-1]
+    data = data.to_numpy(np.float64)[:,order_inds]
+
     print(data.shape)
+
+    means = np.mean(data,axis=0)
+    print(means)
+    stds = np.std(data,axis=0,ddof=1)
+    print(stds)
     
+    # check if edge-types matches pairwise covariance/correlation
     
-    
+'''
+#plot pathway lengths
+pwlens = [len(filteredGenes_all[key]) for key in  filteredGenes_all]
+pwlens.sort(reverse=True)
+import matplotlib.pyplot as plt 
+plt.plot(pwlens)
+plt.title('filtered pathway sizes')
+plt.show()
+exit()
+'''
