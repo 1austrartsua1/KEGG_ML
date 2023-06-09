@@ -42,6 +42,25 @@ def getGraph(pathway,filteredGenes):
                 if not graph[parent].get(child):
                     graph[parent][child] = set()
                 graph[parent][child].add((relation.type,relation.subtypes[0][0]))
+                
+        # add edges between all parents and all children
+        for parent1 in filt_Parent:
+            for parent2 in filt_Parent:
+                if parent1 == parent2:
+                    continue 
+                if not graph[parent1].get(parent2):
+                    graph[parent1][parent2] = set()
+                graph[parent1][parent2].add(("sameNode",None))
+
+        for child1 in filt_Child:
+            for child2 in filt_Child:
+                if child1 == child2:
+                    continue 
+                if not graph.get(child1):
+                    graph[child1] = {}
+                if not graph[child1].get(child2):
+                    graph[child1][child2] = set()
+                graph[child1][child2].add(("sameNode",None))
 
         if not relationTypes.get((relation.type,relation.subtypes[0][0])):
             relationTypes[(relation.type,relation.subtypes[0][0])] = 0
@@ -159,8 +178,7 @@ if __name__ == "__main__":
     
 
     filteredGenes = set(filteredGenes_all[pathwayName])
-    print(filteredGenes)
-    exit()
+    
     acceptedRelations = {('PPrel', 'activation'),('PPrel', 'inhibition')}
 
     

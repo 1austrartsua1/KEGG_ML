@@ -32,25 +32,28 @@ if __name__ == "__main__":
     lsdir = os.listdir('./KEGG_pathways/')
     pathwayNames = os.listdir('./KEGG_pathways/')
     pathwayNames = [p[:-4] for p in pathwayNames]
+    pathwayNames = ['hsa04650']
     data = pd.read_csv('GSE/GSE43151_gs.csv')
     gse_genesets = pd.read_csv('GSE/geneSets.tsv')
-
+    
     filteredGenes_all = getGeneLists(data,gse_genesets,'filtered')
     
 
-    acceptedRelations = {('PPrel', 'activation'),('PPrel', 'inhibition'), ('PPrel', 'binding/association'),
-                         ('ECrel', 'compound'),('PPrel', 'dissociation'),('GErel', 'expression'),('GErel', 'repression')}
+    #acceptedRelations = {('PPrel', 'activation'),('PPrel', 'inhibition'), ('PPrel', 'binding/association'),
+    #                     ('ECrel', 'compound'),('PPrel', 'dissociation'),('GErel', 'expression'),('GErel', 'repression')}
+    acceptedRelations = {('PPrel', 'activation'),('PPrel', 'inhibition'),
+                         ('GErel', 'expression'),('GErel', 'repression'),('sameNode',None)}
+    
     myColors = ['blue','red','green','black','purple','yellow','magenta','orange']
     colors = {}
     for i,relType in enumerate(acceptedRelations):
         colors[relType] = myColors[i]
     
     for pathwayName in pathwayNames:
+        print(pathwayName)
         pathway = read(open('KEGG_pathways/'+pathwayName+'.xml', 'r'))
         filteredGenes = set(filteredGenes_all[pathwayName])
-    
         graph,relationTypes = getGraph(pathway,filteredGenes)
-        print(f"{relationTypes=}")
         
         cleanGraph(graph,acceptedRelations)
         plotGraph('viz/',pathwayName+' graph',colors,graph)
