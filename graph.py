@@ -42,7 +42,8 @@ def getGraph(pathway,filteredGenes):
                 if not graph[parent].get(child):
                     graph[parent][child] = set()
                 graph[parent][child].add((relation.type,relation.subtypes[0][0]))
-                
+        
+        
         # add edges between all parents and all children
         for parent1 in filt_Parent:
             for parent2 in filt_Parent:
@@ -61,7 +62,7 @@ def getGraph(pathway,filteredGenes):
                 if not graph[child1].get(child2):
                     graph[child1][child2] = set()
                 graph[child1][child2].add(("sameNode",None))
-
+        
         if not relationTypes.get((relation.type,relation.subtypes[0][0])):
             relationTypes[(relation.type,relation.subtypes[0][0])] = 0
         relationTypes[(relation.type,relation.subtypes[0][0])] += 1
@@ -92,11 +93,24 @@ def cleanGraph(graph,acceptedRelations):
             for rel in toRemove:
                 graph[parent][child].remove(rel)
 
-        if len(graph[parent][child]) == 0:
+    for parent in graph: 
+        toDel = []
+        for child in graph[parent]:
+            if len(graph[parent][child]) == 0:
+                toDel.append(child)
+
+        for child in toDel:
             del graph[parent][child]
-        
+    
+    toDel = []
+    for parent in graph:
+        if len(graph[parent]) == 0:
+            toDel.append(parent)
+    for parent in toDel:
+        del graph[parent]
+
     numChildren.sort()
-    return numChildren
+    return numChildren, graph
 
 
 
@@ -150,17 +164,18 @@ class BN_Graph:
         node2children = copy.deepcopy(self.node2children)
 
         order = []
+        
         while len(node_list)>0:
             cycleDet = True
             for a_root in node_list:
                 if len(node2parents[a_root]) == 0:
                     cycleDet = False
                     break
-
             if cycleDet:
+                
                 raise Exception("cycle detected")
             order.append(a_root)
-            for child in node2children[a_root]:
+            for child in node2children[a_root]:                
                 node2parents[child].remove(a_root)
 
             node_list.remove(a_root)
@@ -185,7 +200,7 @@ if __name__ == "__main__":
     pathway = read(open('KEGG_pathways/'+pathwayName+'.xml', 'r'))
     graph,relationTypes = getGraph(pathway,filteredGenes)
     #print(f"{relationTypes=}")     
-    cleanGraph(graph,acceptedRelations)
+    _,graph=cleanGraph(graph,acceptedRelations)
     bn = BN_Graph(graph)
     order = bn.topoSort()
     print(order)

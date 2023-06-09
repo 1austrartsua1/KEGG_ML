@@ -32,17 +32,17 @@ if __name__ == "__main__":
     lsdir = os.listdir('./KEGG_pathways/')
     pathwayNames = os.listdir('./KEGG_pathways/')
     pathwayNames = [p[:-4] for p in pathwayNames]
-    pathwayNames = ['hsa04650']
+    pathwayNames = ['hsa04630']
     data = pd.read_csv('GSE/GSE43151_gs.csv')
     gse_genesets = pd.read_csv('GSE/geneSets.tsv')
     
     filteredGenes_all = getGeneLists(data,gse_genesets,'filtered')
     
 
-    #acceptedRelations = {('PPrel', 'activation'),('PPrel', 'inhibition'), ('PPrel', 'binding/association'),
+    #acceptedRelations = {('PPrel', 'activation'),('PPrel', 'inhibition'), ('PPrel', 'binding/association'),('sameNode',None)
     #                     ('ECrel', 'compound'),('PPrel', 'dissociation'),('GErel', 'expression'),('GErel', 'repression')}
     acceptedRelations = {('PPrel', 'activation'),('PPrel', 'inhibition'),
-                         ('GErel', 'expression'),('GErel', 'repression'),('sameNode',None)}
+                         ('GErel', 'expression'),('GErel', 'repression'),}
     
     myColors = ['blue','red','green','black','purple','yellow','magenta','orange']
     colors = {}
@@ -55,9 +55,11 @@ if __name__ == "__main__":
         filteredGenes = set(filteredGenes_all[pathwayName])
         graph,relationTypes = getGraph(pathway,filteredGenes)
         
-        cleanGraph(graph,acceptedRelations)
+        _,graph = cleanGraph(graph,acceptedRelations)
+        
         plotGraph('viz/',pathwayName+' graph',colors,graph)
-
+        bn = BN_Graph(graph)
+        order = bn.topoSort()
         
 
 
