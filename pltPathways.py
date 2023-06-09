@@ -29,11 +29,29 @@ def plotGraph(viz_dir,name,colors,graph):
     dot.render(directory=viz_dir)  
 
 if __name__ == "__main__":
-    lsdir = os.listdir('./KEGG_pathways/')
-    pathwayNames = os.listdir('./KEGG_pathways/')
+    fname = './pathways_new_topList_low/'
+    pathwayNames = os.listdir(fname)
     pathwayNames = [p[:-4] for p in pathwayNames]
     #pathwayNames = ['hsa04630']
     data = pd.read_csv('GSE/GSE43151_gs.csv')
+    
+    '''
+    cols = list(data.columns)
+
+    for i in range(len(cols)):
+        if cols[i] == '6654':
+            col6654 = i 
+        elif cols[i] == '6655':
+            col6655 = i 
+    data1 = np.array(data.iloc[:,col6654])
+    data2 = np.array(data.iloc[:,col6655])
+    import matplotlib.pyplot as plt 
+    plt.plot(data1)
+    plt.plot(data2)
+    plt.show()
+    exit()
+    '''
+
     gse_genesets = pd.read_csv('GSE/geneSets.tsv')
     
     filteredGenes_all = getGeneLists(data,gse_genesets,'filtered')
@@ -51,7 +69,7 @@ if __name__ == "__main__":
     dags = []
     for pathwayName in pathwayNames:
         print(pathwayName)
-        pathway = read(open('KEGG_pathways/'+pathwayName+'.xml', 'r'))
+        pathway = read(open(fname+pathwayName+'.xml', 'r'))
         filteredGenes = set(filteredGenes_all[pathwayName])
         graph,relationTypes = getGraph(pathway,filteredGenes)
         
