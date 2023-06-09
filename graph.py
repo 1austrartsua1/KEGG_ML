@@ -45,6 +45,7 @@ def getGraph(pathway,filteredGenes):
         
         
         # add edges between all parents and all children
+        
         for parent1 in filt_Parent:
             for parent2 in filt_Parent:
                 if parent1 == parent2:
@@ -63,6 +64,7 @@ def getGraph(pathway,filteredGenes):
                     graph[child1][child2] = set()
                 graph[child1][child2].add(("sameNode",None))
         
+
         if not relationTypes.get((relation.type,relation.subtypes[0][0])):
             relationTypes[(relation.type,relation.subtypes[0][0])] = 0
         relationTypes[(relation.type,relation.subtypes[0][0])] += 1
@@ -82,9 +84,9 @@ def cleanGraph(graph,acceptedRelations):
         numChildren.append(len(graph[parent]))
         toDel = []
         for child in graph[parent]:
-            if len(graph[parent][child])>1:
-                print('Multiple relationships detected')
-                print(graph[parent][child])
+            #if len(graph[parent][child])>1:
+            #    print('Multiple relationships detected')
+            #    print(graph[parent][child])
             toRemove = []
             for rel in graph[parent][child]:
                 if (not rel in acceptedRelations):
@@ -171,9 +173,9 @@ class BN_Graph:
                 if len(node2parents[a_root]) == 0:
                     cycleDet = False
                     break
-            if cycleDet:
-                
-                raise Exception("cycle detected")
+            if cycleDet:    
+                return None 
+            
             order.append(a_root)
             for child in node2children[a_root]:                
                 node2parents[child].remove(a_root)
