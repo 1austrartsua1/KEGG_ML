@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
     #acceptedRelations = {('PPrel', 'activation'),('PPrel', 'inhibition'), ('PPrel', 'binding/association'),('sameNode',None)
     #                     ('ECrel', 'compound'),('PPrel', 'dissociation'),('GErel', 'expression'),('GErel', 'repression')}
-    acceptedRelations = {('PPrel', 'activation'),('PPrel', 'inhibition')}
+    acceptedRelations = {('PPrel', 'activation'),('PPrel', 'inhibition'),('sameNode',None)}
     
     myColors = ['blue','red','green','black','purple','yellow','magenta','orange']
     colors = {}

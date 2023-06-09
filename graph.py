@@ -45,19 +45,21 @@ def getGraph(pathway,filteredGenes):
         
         
         # add edges between all parents and all children
+        lsParent = list(filt_Parent)
+        lsChild = list(filt_Child)
         
-        for parent1 in filt_Parent:
-            for parent2 in filt_Parent:
-                if parent1 == parent2:
-                    continue 
+        for i in range(len(lsParent)):
+            for j in range(i+1,len(lsParent)):
+                parent1 = lsParent[i]
+                parent2 = lsParent[j]
                 if not graph[parent1].get(parent2):
                     graph[parent1][parent2] = set()
                 graph[parent1][parent2].add(("sameNode",None))
 
-        for child1 in filt_Child:
-            for child2 in filt_Child:
-                if child1 == child2:
-                    continue 
+        for i in range(len(lsChild)):
+            for j in range(i+1,len(lsChild)):
+                child1 = lsChild[i]
+                child2 = lsChild[j]
                 if not graph.get(child1):
                     graph[child1] = {}
                 if not graph[child1].get(child2):
