@@ -1,3 +1,7 @@
+'''
+plots pathways using graphviz
+
+'''
 from Bio.KEGG.KGML.KGML_parser import read
 import pandas as pd 
 from geneSetUtils import getGeneLists

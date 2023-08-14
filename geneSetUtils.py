@@ -1,3 +1,6 @@
+'''
+Utils for dealing with the KEGG gene-sets.
+'''
 import pandas as pd
 import copy
 

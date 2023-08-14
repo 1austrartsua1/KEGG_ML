@@ -1,3 +1,7 @@
+'''
+Uses bioPython to extract a graph from the raw xml file downloaded from KEGG.
+'''
+
 from Bio.KEGG.KGML.KGML_parser import read
 import pandas as pd 
 from geneSetUtils import *
