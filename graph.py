@@ -187,22 +187,24 @@ class BN_Graph:
         return order
 
 if __name__ == "__main__":
-    pathwayName = 'hsa04650'
+    pathwayName = 'hsa04015'
 
     data = pd.read_csv('GSE/GSE43151_gs.csv')
     gse_genesets = pd.read_csv('GSE/geneSets.tsv')
 
     filteredGenes_all = getGeneLists(data,gse_genesets,'filtered')
     
-    
-
     filteredGenes = set(filteredGenes_all[pathwayName])
     
     acceptedRelations = {('PPrel', 'activation'),('PPrel', 'inhibition')}
 
     
     pathway = read(open('KEGG_pathways/'+pathwayName+'.xml', 'r'))
+    print(pathway)
+    print(len(pathway.relations))
     graph,relationTypes = getGraph(pathway,filteredGenes)
+
+    
     #print(f"{relationTypes=}")     
     _,graph=cleanGraph(graph,acceptedRelations)
     bn = BN_Graph(graph)
