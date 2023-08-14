@@ -2,16 +2,12 @@
 
 Incorporating KEGG pathways into ML models for Phenotype prediction.
 
-## GSE
-gene expression data.
+## Folders
+- GSE: gene expression data.
 
-## KEGG_pathways
+- KEGG_pathways: Some kegg pathway files downloaded from the KEGG database. Feel free to add more
 
-Some kegg pathway files downloaded from the KEGG database. Feel free to add more
-
-## pathway_new_topList_low
-
-Some more KEGG pathways that were associated with the low dose classification problem
+- pathway_new_topList_low: Some more KEGG pathways that were associated with the low dose classification problem
 
 ## files
 
